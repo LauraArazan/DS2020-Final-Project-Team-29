@@ -1,0 +1,145 @@
+---
+title: "DS2020 Final Project Team 29"
+author: "Laura Arazan"
+date: "2025-05-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(tidyverse)
+library(readr)
+library(ggplot2)
+
+```
+
+
+```{r}
+df <- read_delim("marketing_campaign.csv", delim = "\t")
+
+summary(df)
+head(df)
+str(df)
+
+```
+Condense variables age, Total_Children, Total_Spent, and Total_Campaign_Accepted
+
+```{r}
+df$Age <- 2025 - df$Year_Birth
+df$Total_Children <- df$Kidhome + df$Teenhome
+df$Total_Spent <- rowSums(df[, c("MntWines", "MntFruits", "MntMeatProducts", 
+                                 "MntFishProducts", "MntSweetProducts", "MntGoldProds")])
+df$Total_Campaign_Accepted <- rowSums(df[, c("AcceptedCmp1", "AcceptedCmp2", 
+                                             "AcceptedCmp3", "AcceptedCmp4", "AcceptedCmp5")])
+summary(df$Income)
+
+```
+
+Clean the data
+
+```{r}
+missing <- colSums(is.na(df))
+missing[missing > 0]
+
+df <- df %>% drop_na(Income)
+missing <- colSums(is.na(df))
+missing[missing > 0]
+
+```
+
+Explore relations
+
+```{r}
+ggplot(df, aes(x = Income, y = Total_Spent)) +
+  geom_point(alpha = 0.4, color = "lightblue") +
+  geom_smooth(method = "lm", color = "pink", se = FALSE) +
+  labs(title = "Income vs Total Spending", x = "Income ($)", y = "Total Spend ($)")
+
+ggplot(df, aes(x = Age, y = Total_Spent)) +
+  geom_point(alpha = 0.4, color = "lightgreen") +
+  geom_smooth(method = "loess", color = "pink", se = FALSE) +
+  labs(title = "Age vs Total Spending", x = "Age", y = "Total Spend ($)")
+
+ggplot(df, aes(x = Total_Campaign_Accepted)) +
+  geom_bar(fill = "purple") +
+  labs(title = "Number of Campaigns Accepted", x = "Campaigns Accepted", y = "Customer Count")
+```
+
+Discovering the top 20% of customers
+
+```{r}
+top_spenders <- df %>% 
+  filter(Total_Spent > quantile(Total_Spent, 0.80))
+
+ggplot(top_spenders, aes(x = Marital_Status, fill = Education)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Top Spenders by Marital Status & Education", x = "Marital Status")
+
+```
+
+What does an ideal customer look like?
+
+```{r, fig.height = 12}
+ideal <- df %>%
+  filter(
+    Total_Spent > quantile(Total_Spent, 0.80),
+    Total_Campaign_Accepted > 0,
+    Age >= 30, Age <= 60,
+    Income >= median(Income, na.rm=TRUE)
+  )
+
+summary(ideal)
+
+df_seperated_customers <- df %>%
+  mutate(
+    Ideal_Customer = ifelse(
+      Total_Spent > quantile(Total_Spent, 0.80, na.rm = TRUE) &
+      Total_Campaign_Accepted > 0 &
+      Age >= 30 & Age <= 60 &
+      Income >= median(Income, na.rm = TRUE),
+      "Ideal", "Other"
+    )
+  )
+
+# Select numeric columns (excluding ID)
+numeric_cols <- df_seperated_customers %>%
+  select(where(is.numeric)) %>%
+  select(-ID) %>%
+  colnames()
+
+# Reshape to long format
+df_long <- df_seperated_customers %>%
+  select(all_of(numeric_cols), Ideal_Customer) %>%
+  pivot_longer(
+    cols = -Ideal_Customer,
+    names_to = "Variable",
+    values_to = "Value"
+  )
+
+# Plot faceted boxplots
+ggplot(df_long, aes(x = Ideal_Customer, y = Value, fill = Ideal_Customer)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.6) +
+  facet_wrap(~ Variable, scales = "free", ncol = 3) +
+  labs(title = "Comparison of All Numeric Variables by Customer Type",
+       x = "Customer Type", y = "Value") +
+  scale_fill_manual(values = c("Ideal" = "orange", "Other" = "gray")) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "none")
+```
+
+Idea customers are most likely
+
+- Aged 30–60
+
+- Spend a lot across product categories
+
+- Responsive to campaigns
+
+- Mid-to-high income
+
+- Educated and likely married
