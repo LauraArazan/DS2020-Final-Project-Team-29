@@ -362,18 +362,33 @@ display: none;
 <div id="introduction" class="section level3">
 <h3>Introduction</h3>
 <p>This dataset is a collection of information on a company’s customers.
-I found it on kaggle distributed by Dr. Omar Romero-Hernandez. The data
-has a couple points of concern that I noticed; there isn’t a range on
-when the data was collected or how it was collected, one of the options
-for Marital_Status is called “absurd”, there isn’t any data on customers
-with a maximum education below a blachlor’s degree, no location(s) are
-given, and there is no explanation given for what types of discounts
-customers used or what type of campaign(s) they accepted.</p>
+I found it on kaggle distributed by Dr. Omar Romero-Hernandez. I am
+interested in discovering how to best find a specific set of information
+(in this case customers) that best fits a set of requirements (in this
+case the most beneficial customers to a company). While testing on this
+dataset I will be able to narrow what the most useful tools to me are
+and gaining familiarity using them. I think this dataset is similar to
+what a company could give me in the future with the same goal of finding
+the best candidates to focus their attention on.</p>
+<p>I will be reading the data in, cleaning it, looking for points of
+interest and familiarizing myself with the format and data, exploring
+different relationships between data points, comparing models, and
+narrowing down candidates until I find a set of data points that best
+fit what a company’s ideal customer is composed of.</p>
+<p>The final result could be used for a marketing or ad campaign
+targeting the most effective group of customers in this company.</p>
+<p>The data has a couple points of concern that I noticed; there isn’t a
+range on when the data was collected or how it was collected, one of the
+options for Marital_Status is called “absurd”, there isn’t any data on
+customers with a maximum education below a bachelor’s degree, no
+location(s) are given, and there is no explanation given for what types
+of discounts customers used or what type of campaign(s) they
+accepted.</p>
 </div>
 <div id="data" class="section level3">
 <h3>Data</h3>
-<p>Since the data is in a csv file on kaggle we can download it and read
-it in using the readr library in r.</p>
+<p>Since the data is in a csv file on kaggle I downloaded it and read it
+in using the readr library in R.</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
 <pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
@@ -387,6 +402,8 @@ it in using the readr library in r.</p>
 ## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 <pre class="r"><code>library(readr)
 library(ggplot2)</code></pre>
+<p>Then, I read it into R and ran the dataset through some functions to
+get a better understanding of it.</p>
 <pre class="r"><code>df &lt;- read_delim(&quot;marketing_campaign.csv&quot;, delim = &quot;\t&quot;)</code></pre>
 <pre><code>## Rows: 2240 Columns: 29
 ## ── Column specification ────────────────────────────────────────────────────────
@@ -542,8 +559,9 @@ library(ggplot2)</code></pre>
 ##   ..   Response = col_double()
 ##   .. )
 ##  - attr(*, &quot;problems&quot;)=&lt;externalptr&gt;</code></pre>
-<p>Condense variables age, Total_Children, Total_Spent, and
-Total_Campaign_Accepted</p>
+<p>Here I condensed variables into; Age, Total_Children, Total_Spent,
+and Total_Campaign_Accepted. Then pulled up a summary to make sure it
+worked.</p>
 <pre class="r"><code>df$Age &lt;- 2025 - df$Year_Birth
 df$Total_Children &lt;- df$Kidhome + df$Teenhome
 df$Total_Spent &lt;- rowSums(df[, c(&quot;MntWines&quot;, &quot;MntFruits&quot;, &quot;MntMeatProducts&quot;, 
