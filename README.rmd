@@ -9,7 +9,23 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Customer Personality Analysis
+
+
+### Introduction
+
+This dataset is a collection of information on a company's customers. I found it on kaggle distributed by Dr. Omar Romero-Hernandez. I am interested in discovering how to best find a specific set of information (in this case customers) that best fits a set of requirements (in this case the most beneficial customers to a company). While testing on this dataset I will be able to narrow what the most useful tools to me are and gaining familiarity using them. I think this dataset is similar to what a company could give me in the future with the same goal of finding the best candidates to focus their attention on.
+
+I will be reading the data in, cleaning it, looking for points of interest and familiarizing myself with the format and data, exploring different relationships between data points, comparing models, and narrowing down candidates until I find a set of data points that best fit what a company's ideal customer is composed of.
+
+The final result could be used for a marketing or ad campaign targeting the most effective group of customers in this company.
+
+The data has a couple points of concern that I noticed; there isn't a range on when the data was collected or how it was collected, one of the options for Marital_Status is called "absurd", there isn't any data on customers with a maximum education below a bachelor's degree, no location(s) are given, and there is no explanation given for what types of discounts customers used or what type of campaign(s) they accepted.
+
+
+### Data
+
+Since the data is in a csv file on kaggle we can download it and read it in using the readr library in r.
 
 ```{r}
 library(tidyverse)
