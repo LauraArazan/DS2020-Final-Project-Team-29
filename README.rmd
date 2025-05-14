@@ -86,7 +86,9 @@ ggplot(df, aes(x = Total_Campaign_Accepted)) +
   labs(title = "Number of Campaigns Accepted", x = "Campaigns Accepted", y = "Customer Count")
 ```
 
-I discovered the top 20% of customers by filtering customers that were in the top 20% of money spent at this company. Then, I made a plot of the top spending customers and compared their marital status vs their education.
+I discovered the top 20% of customers by filtering customers that were in the top 20% of money spent at this company. Then, I made a plot of the top spending customers and compared their marital status vs their education. I saw that the top spenders tend to be married or have a bachelor's degree, and this dataset seems to exclude any customers with an education below a bachelor’s degree. Also, As income increases so does the amount of money spent, there seems to be an increase in money spent around the middle of the customers’ income, customers tend to start purchasing from this company around 30 years old and begin to drop off around 60 years old, and most customers don’t participate in this company’s campaigns.
+
+
 
 ```{r}
 top_spenders <- df %>% 

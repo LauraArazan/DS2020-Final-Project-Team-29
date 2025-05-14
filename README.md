@@ -321,10 +321,10 @@ ggplot(top_spenders, aes(x = Marital_Status, fill = Education)) +
 
 ![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-What does an ideal customer look like? Here I filtered the top 20% of
-spending customers, who accepted at least one campaign, were from 30 to
-60 (inclusive), and had a median income at or above that of all of the
-customers sampled.
+What does an ideal customer look like? Taking into account what the
+graphs above, I filtered the top 20% of spending customers, who accepted
+at least one campaign, were from 30 to 60 (inclusive), and had a median
+income at or above that of all of the customers sampled.
 
 ``` r
 ideal <- df %>%
